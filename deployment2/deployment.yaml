@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-api-2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-world-api-2
+  template:
+    metadata:
+      labels:
+        app: hello-world-api-2
+    spec:
+      containers:
+      - name: hello-world-api
+        image: nmatsui/hello-world-api:latest
+        ports:
+        - containerPort: 80
+        env:
+          - name: POD_ID
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.uid
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
